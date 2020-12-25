@@ -40,7 +40,7 @@ func part2Solver(input: [String]) -> Int {
     for dat in input {
         var valid = true
         for entry in seperator(dat) {
-            var e = entry.components(separatedBy: ":").last!
+            let e = entry.components(separatedBy: ":").last!
             if entry.contains("byr") {
                 if Int(e)! > 2002 || Int(e)! < 1920 {
                     valid = false
@@ -57,28 +57,18 @@ func part2Solver(input: [String]) -> Int {
                     break
                 }
             } else if entry.contains("hgt") {
-                if e.contains("cm") {
-                    e.popLast()
-                    e.popLast()
-                    if Int(e)! > 193 || Int(e)! < 150 {
-                        valid = false
-                        break
-                    }
-                } else if e.contains("in") {
-                    e.popLast()
-                    e.popLast()
-                    if Int(e)! > 76 || Int(e)! < 59 {
-                        valid = false
-                        break
-                    }
-                } else {
+                let num = Int(e[...e.index(e.endIndex, offsetBy: -3)])!
+                let cmViol = e.contains("cm") && (num > 193 || num < 150)
+                let inViol = e.contains("in") && (num > 76 || num < 59)
+                let noUnit = !e.contains("cm") && !e.contains("in")
+                if cmViol || inViol || noUnit {
                     valid = false
                     break
                 }
             } else if entry.contains("hcl") {
                 if e.first! == "#" {
-                    e.remove(at: e.startIndex)
-                    if e.filter({ "0123456789abcdef".contains($0) }).count != 6 {
+                    let filtered = e[e.index(after: e.startIndex)...].filter { "0123456789abcdef".contains($0) }
+                    if filtered.count != 6 {
                         valid = false
                         break
                     }
@@ -92,7 +82,8 @@ func part2Solver(input: [String]) -> Int {
                     break
                 }
             } else if entry.contains("pid") {
-                if e.filter({ "0123456789".contains($0) }).count != 9 {
+                let filtered = e.filter { "0123456789".contains($0) }
+                if filtered.count != 9 {
                     valid = false
                     break
                 }

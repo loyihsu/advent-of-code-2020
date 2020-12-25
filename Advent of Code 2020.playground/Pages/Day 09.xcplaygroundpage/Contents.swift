@@ -19,7 +19,8 @@ func twoSum(in prev: [Int], _ find: Int) -> Bool {
     for number in prev {
         if prev.contains(find-number) {
             if find-number == number {
-                if prev.filter({ $0 == number }).count > 1 {
+                let found = prev.filter { $0 == number }
+                if found.count > 1 {
                     return true
                 }
             } else {
